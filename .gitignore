@@ -67,3 +67,18 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# For Vim users:
+*.swp
+*.swo
+
+# For emacs users:
+*~
+*#
+
+# For VSCode users
+*.vscode
+
+# General:
+*.zip
+
