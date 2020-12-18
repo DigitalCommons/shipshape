@@ -29,7 +29,9 @@
   "scripts": {
     "build": "gatsby build --prefix-paths",
     "deploy": "gatsby build --prefix-paths && gh-pages -d public",
+    "predevelop": "php -t php -S 0.0.0.0:8080 &",
     "develop": "gatsby develop",
+    "postdevelop": "pkill $(lsof -t -i:8080)",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
