@@ -1,9 +1,11 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "shipshape",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Status information for the Solidarity Economy Association maps",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "contributors": [
+    "wu-lee <npm.wu-lee@noodlefactory.co.uk>"
+  ],
   "dependencies": {
     "axios": "^0.21.0",
     "gatsby": "^2.24.50",
@@ -24,14 +26,20 @@
     "prettier": "2.1.0"
   },
   "keywords": [
-    "gatsby"
+    "SEA", "solidarity", "association", "economy", "maps", "status"
   ],
+  "homepage": "https://github.com/SolidarityEconomyAssociation/shipshape",
   "license": "0BSD",
+  "config": {
+    "deploy_to": "",
+    "deploy_user": "www-data",
+    "deploy_group": "www-data"
+  },
   "scripts": {
     "build": "gatsby build --prefix-paths",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public",
+    "deploy": "set -x; rsync -avzc --delete --rsync-path='sudo rsync' --usermap=\"*:$npm_package_config_deploy_user\" --groupmap=\"*:$npm_package_config_deploy_group\" public/ php/ --exclude=*~ \"${npm_package_config_deploy_to:?Please define the '$npm_package_name:deploy_to' npm config parameter}\"",
     "predevelop": "php -t php -S 0.0.0.0:8080 &",
-    "develop": "gatsby develop",
+    "develop": "gatsby develop -H 0.0.0.0",
     "postdevelop": "pkill $(lsof -t -i:8080)",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
@@ -41,9 +49,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+    "url": "https://github.com/SolidarityEconomyAssociation/shipshape"
   },
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/SolidarityEconomyAssociation/shipshape/issues"
   }
 }
