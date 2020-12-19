@@ -80,7 +80,7 @@ function inspect_site($url) {
 
     $meta = [];
     try {
-        //$meta = json("$dgu/meta.json");
+        $meta = json("$dgu/meta.json");
     }
     catch(Exception $e) {}
     
