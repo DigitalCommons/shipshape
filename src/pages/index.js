@@ -46,14 +46,23 @@ const siteSummaryColumns = [
 ];
 
 const fieldMap = {
-  "url": s => s.url,
+  "url": s => <a href={s.url} rel="noreferrer" target="_blank">{s.url}</a>,
   "title": s => s.config.htmlTitle,
   "lat/lng": s => s.config.defaultLatLng?.join(", "),
   "timestamp": s => s.version.timestamp,
   "gitcommit": s => s.version.gitcommit,
   "dataset": s => s.config.namedDatasets.join(", "),
-  "endpoint": s => s.endpoint,
-  "DGU" : s => s.defaultGraphUri,
+  "endpoint": s => {
+    // See
+    // http://docs.openlinksw.com/virtuoso/rdfsparqlprotocolendpoint/
+    // for how to construct this URL
+    const usp = new URLSearchParams();
+    usp.append("qtxt", s.query);
+    usp.append("default-graph-uri", s.defaultGraphUri);
+    const queryUrl = s.endpoint+'?'+usp.toString();
+    return <a href={queryUrl} rel="noreferrer" target="_blank">{s.endpoint}</a>
+  },
+  "DGU" : s => <a href={s.defaultGraphUri} rel="noreferrer" target="_blank">{s.defaultGraphUri}</a>,
 };
 
 const SiteSummary = ({ siteInfo }) => {
