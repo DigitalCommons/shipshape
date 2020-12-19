@@ -96,18 +96,17 @@ const SitesSummary = ({ siteInfos }) => {
   );
 }
 
+const servers = Object.keys(sites.deployed).sort();
+const siteUrls = servers.map(server => {
+  const siteUrls = sites.deployed[server];
+  const labels = Object.keys(siteUrls).sort();
+  return labels.map(label => siteUrls[label]);
+}).flat();
+
+const emptySiteInfos = siteUrls.map(url => ({url: url}));
 
 
-const IndexPage = () => {
-  const servers = Object.keys(sites.deployed).sort();
-  const siteUrls = servers.map(server => {
-    const siteUrls = sites.deployed[server];
-    const labels = Object.keys(siteUrls).sort();
-    return labels.map(label => siteUrls[label]);
-  }).flat();
-  console.log("sites", siteUrls);
-  const emptySiteInfos = siteUrls.map(url => ({url: url}));
-  
+const IndexPage = () => {  
   const [lastRefresh, setLastRefresh] = useState(new Date());
   const [siteInfos, setSiteInfos] = useState(emptySiteInfos);
   const apiUrl = withPrefix('/api/sea-map.php');
