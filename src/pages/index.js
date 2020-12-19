@@ -99,10 +99,9 @@ const IndexPage = () => {
   console.log("sites", siteUrls);
   const emptySiteInfos = siteUrls.map(url => ({url: url}));
   
-  const [siteInfo, setSiteInfo] = useState({pending: true});
+  const [lastRefresh, setLastRefresh] = useState(new Date());
   const [siteInfos, setSiteInfos] = useState(emptySiteInfos);
   const apiUrl = withPrefix('/api/sea-map.php');
-  const siteUrl = 'https://dev.ica.solidarityeconomy.coop';
   async function fetchSite(siteUrl) {
     const url = `${apiUrl}?url=${siteUrl}`;
     console.log("fetching", url);
@@ -116,6 +115,7 @@ const IndexPage = () => {
   }
 
   function fetchSites(siteUrls) {
+    setLastRefresh(new Date());
     Promise.all(siteUrls.map(async (url, ix) => {
       const siteInfo = await fetchSite(url)
 
@@ -142,6 +142,7 @@ const IndexPage = () => {
       <button onClick={() => fetchSites(siteUrls)}>
         Refresh
       </button>
+      <span>Last refresh: { lastRefresh.toLocaleString() }</span>
     </Layout>
   )
 }
