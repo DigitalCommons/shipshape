@@ -193,23 +193,22 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
   );
 }
 
-const servers = Object.keys(sites.deployed).sort();
-const emptySiteInfos = servers.map(server => {
-  const siteUrls = sites.deployed[server];
-  const names = Object.keys(siteUrls).sort();
-  return names.map(name => ({
-    url: siteUrls[name],
-    name: name,
-    server: server,
-  }));
-}).flat();
-
-
-console.log(emptySiteInfos);
+const emptySiteInfos = () => {
+  const servers = Object.keys(sites.deployed).sort();
+  return servers.map(server => {
+    const siteUrls = sites.deployed[server];
+    const names = Object.keys(siteUrls).sort();
+    return names.map(name => ({
+      url: siteUrls[name],
+      name: name,
+      server: server,
+    }));
+  }).flat();
+}
 
 const IndexPage = () => {  
   const [lastRefresh, setLastRefresh] = useState(new Date());
-  const [siteInfos, setSiteInfos] = useState(emptySiteInfos);
+  const [siteInfos, setSiteInfos] = useState(emptySiteInfos());
   const apiUrl = withPrefix('/api/sea-map.php');
   async function fetchSite(siteUrl) {
     const url = `${apiUrl}?url=${siteUrl}`;
@@ -223,8 +222,9 @@ const IndexPage = () => {
     }
   }
 
-  function fetchSites(siteInfos) {
+  function fetchSites() {
     setLastRefresh(new Date());
+    setSiteInfos(emptySiteInfos())
     Promise.all(siteInfos.map(async (site, ix) => {
       const newInfo = await fetchSite(site.url);
       const siteInfo = { ...site, ...newInfo }
@@ -253,14 +253,14 @@ const IndexPage = () => {
   }
   useEffect(() => {
     // Update the document title using the browser API
-    fetchSites(siteInfos);
+    fetchSites(emptySiteInfos());
   }, []);
   return (
     <Layout>
       <SitesSummary
         siteInfos={siteInfos}
         sortSitesBy={sortSitesBy} />
-      <button onClick={() => fetchSites(siteInfos)} className={sitesSummaryStyles.refreshButton}>
+      <button onClick={() => fetchSites()} className={sitesSummaryStyles.refreshButton}>
         Refresh
       </button>
       <span>Last refresh: { lastRefresh.toLocaleString() }</span>
