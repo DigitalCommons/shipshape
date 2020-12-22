@@ -14,6 +14,7 @@ const sites = {
       "mutual-aid-project": "https://dev.mutual-aid.solidarityeconomy.coop",
       "newbridge-project": "https://dev.newbridge.solidarityeconomy.coop",
       "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
+      "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
     },
     
     "prod-0": {
@@ -23,7 +24,8 @@ const sites = {
       "mutual-aid-project": "https://prod.mutual-aid.solidarityeconomy.coop",
       "newbridge-project": "https://prod.newbridge.solidarityeconomy.coop",
       "oxford-project": "https://prod.oxford.solidarityeconomy.coop",
-    },
+      "mersey-green-project": "https://prod.mersey-green.solidarityeconomy.coop",
+   },
   },
 };
 
