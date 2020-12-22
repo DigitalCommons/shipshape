@@ -29,24 +29,6 @@ const sites = {
   },
 };
 
-const siteSummaryColumns = [
-  "name", "server", "title", "lat/lng", "timestamp", "gitcommit", "dataset", "endpoint", "DGU"
-];
-
-// Accessor functions for the raw values to show in each column
-// See htmlFieldMap for the HTML-ised version.
-const fieldMap = {
-  "name": s => s.name,
-  "server": s => s.server,
-  "title": s => s.config.htmlTitle,
-  "lat/lng": s => s.config.defaultLatLng,
-  "timestamp": s => s.version.timestamp,
-  "gitcommit": s => s.version.gitcommit,
-  "dataset": s => s.config.namedDatasets,
-  "endpoint": s => s.endpoint,
-  "DGU" : s => s.defaultGraphUri,
-};
-
 // Various sort functions. Reminder: compare(a, b) functions should return
 // -1 if a is before b, 1 if it is after, and 0 if they are equal.
 
@@ -99,50 +81,94 @@ const mkSorter = (comparer, accessor) => ({
   false: mkSafeComparer(comparer, accessor, false),
 });
 
-
-// Maps each column title to a sorter function for that column
-const sortFieldMap = {
-  "name": mkSorter(stringSort, fieldMap.name),
-  "server": mkSorter(stringSort, fieldMap.server),
-  "title": mkSorter(stringSort, fieldMap.title),
-  "lat/lng": mkSorter(arySort(numSort), fieldMap["lat/lng"]),
-  "timestamp": mkSorter(stringSort, fieldMap.timestamp),
-  "gitcommit": mkSorter(stringSort, fieldMap.gitcommit),
-  "dataset": mkSorter(arySort(stringSort), fieldMap.dataset),
-  "endpoint": mkSorter(stringSort, fieldMap.endpoint),
-  "DGU" : mkSorter(stringSort, fieldMap.DGU),
+// Constructs a field specification
+const mkFieldSpec = ({title, hint = null, accessor, sortWith, renderer}) => {
+  return {
+    title,
+    hint,
+    accessor,
+    sorter: mkSorter(sortWith, accessor),
+    renderer,
+  };
 };
 
-// Functions to generate the html value in columns
-const htmlFieldMap = {
-  "name": s =>
-    <>
-    <span>{s.name}</span>&nbsp;
-    <a href={`data:application/json;base64,`+btoa(JSON.stringify(s,null,2))} rel="noreferrer" target="_blank">&#x2699;</a>
-    </>,
-  "server": s => <a href={s.url} rel="noreferrer" target="_blank">{s.server}</a>,
-  "title": s => s.config.htmlTitle,
-  "lat/lng": s => s.config.defaultLatLng?.join(", "),
-  "timestamp": s => s.version.timestamp,
-  "gitcommit": s => s.version.gitcommit,
-  "dataset": s => s.config.namedDatasets.join(", "),
-  "endpoint": s => {
-    // See
-    // http://docs.openlinksw.com/virtuoso/rdfsparqlprotocolendpoint/
-    // for how to construct this URL
-    const usp = new URLSearchParams();
-    usp.append("qtxt", s.query);
-    usp.append("default-graph-uri", s.defaultGraphUri);
-    const queryUrl = s.endpoint+'?'+usp.toString();
-    return <a href={queryUrl} rel="noreferrer" target="_blank">{s.endpoint}</a>
-  },
-  "DGU" : s => <a href={s.defaultGraphUri} rel="noreferrer" target="_blank">{s.defaultGraphUri}</a>,
-};
+
+// An ordered list of field specifications
+const fields = [
+  mkFieldSpec({
+    title: "name",
+    accessor: s => s.name,
+    sortWith: stringSort,
+    renderer: s => (
+        <>
+          <span>{s.name}</span>&nbsp;
+          <a href={`data:application/json;base64,`+btoa(JSON.stringify(s,null,2))} rel="noreferrer" target="_blank">&#x2699;</a>
+        </>
+    ),
+  }),
+  mkFieldSpec({
+    title: "server",
+    accessor: s => s.server,
+    sortWith: stringSort,
+    renderer: s => (<a href={s.url} rel="noreferrer" target="_blank">{s.server}</a>),
+  }),
+  mkFieldSpec({
+    title: "title",
+    accessor: s => s.config.htmlTitle,
+    sortWith: stringSort,
+    renderer: s => s.config.htmlTitle,
+  }),
+  mkFieldSpec({
+    title: "lat/lng",
+    accessor: s => s.config.defaultLatLng,
+    sortWith: arySort(numSort),
+    renderer: s => s.config.defaultLatLng?.join(", "),
+  }),
+  mkFieldSpec({
+    title: "timestamp",
+    accessor: s => s.version.timestamp,
+    sortWith: stringSort,
+    renderer: s => s.version.timestamp,
+  }),
+  mkFieldSpec({
+    title: "gitcommit",
+    accessor: s => s.version.gitcommit,
+    sortWith: stringSort,
+    renderer: s => s.version.gitcommit,
+  }),
+  mkFieldSpec({
+    title: "dataset",
+    accessor: s => s.config.namedDatasets,
+    sortWith: arySort(stringSort),
+    renderer: s => s.config.namedDatasets.join(", "),
+  }),
+  mkFieldSpec({
+    title: "endpoint",
+    accessor: s => s.endpoint,
+    sortWith: stringSort,
+    renderer: s => {
+      // See
+      // http://docs.openlinksw.com/virtuoso/rdfsparqlprotocolendpoint/
+      // for how to construct this URL
+      const usp = new URLSearchParams();
+      usp.append("qtxt", s.query);
+      usp.append("default-graph-uri", s.defaultGraphUri);
+      const queryUrl = s.endpoint+'?'+usp.toString();
+      return <a href={queryUrl} rel="noreferrer" target="_blank">{s.endpoint}</a>
+    },
+  }),
+  mkFieldSpec({
+    title: "DGU",
+    accessor: s => s.defaultGraphUri,
+    sortWith: stringSort,
+    renderer: s => (<a href={s.defaultGraphUri} rel="noreferrer" target="_blank">{s.defaultGraphUri}</a>),
+  }),
+];
 
 const SiteSummary = ({ siteInfo }) => {
-  const value = (col) => {
+  const value = (field) => {
     try {
-      return htmlFieldMap[col](siteInfo);
+      return field.renderer(siteInfo);
     }
     catch(_) {
       return '-';
@@ -150,7 +176,7 @@ const SiteSummary = ({ siteInfo }) => {
   };
   return (
     <tr>
-      { siteSummaryColumns.map(col => <td key={col}>{ value(col) }</td>) }
+      { fields.map(field => <td key={field.title}>{ value(field) }</td>) }
     </tr>
   );
 }
@@ -166,23 +192,24 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
     }
     return sitesSummaryStyles.unsorted;
   };
-  const mkSortHandler = (col) => () => {
-    const sortOrder = !sortState[col];
-    const newSortState = { [col]: sortOrder };
+  const mkSortHandler = (field) => () => {
+    const sortOrder = !sortState[field.title];
+    const newSortState = { [field.title]: sortOrder };
     setSortState(newSortState);
-    sortSitesBy(col, sortOrder);
+    sortSitesBy(field, sortOrder);
   };
   return (
     <table>
       <thead>
         <tr>
-          { siteSummaryColumns.map(col =>
-                                   <th
-                                     key={col}
-                                     className={getClass(col)}
-                                     onClick={mkSortHandler(col)}>
-                                     {col}
-                                   </th>)
+          { fields.map((field, ix) =>
+                       <th
+                         key={ix}
+                         className={getClass(field.title)}
+                         title={field.hint}
+                         onClick={mkSortHandler(field)}>
+                       {field.title}
+                       </th>)
           }
         </tr>
       </thead>
@@ -243,8 +270,8 @@ const IndexPage = () => {
     }));
   }
 
-  function sortSitesBy(col, isAscending = true) {
-    const sorter = sortFieldMap[col][isAscending];
+  function sortSitesBy(field, isAscending = true) {
+    const sorter = field.sorter[isAscending];
     //console.log("sortSitesBy", col, isAscending);
 
     setSiteInfos((oldSiteInfos) => {
