@@ -187,14 +187,18 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
 }
 
 const servers = Object.keys(sites.deployed).sort();
-const siteUrls = servers.map(server => {
+const emptySiteInfos = servers.map(server => {
   const siteUrls = sites.deployed[server];
-  const labels = Object.keys(siteUrls).sort();
-  return labels.map(label => siteUrls[label]);
+  const names = Object.keys(siteUrls).sort();
+  return names.map(name => ({
+    url: siteUrls[name],
+    name: name,
+    server: server,
+  }));
 }).flat();
 
-const emptySiteInfos = siteUrls.map(url => ({url: url}));
 
+console.log(emptySiteInfos);
 
 const IndexPage = () => {  
   const [lastRefresh, setLastRefresh] = useState(new Date());
@@ -212,10 +216,11 @@ const IndexPage = () => {
     }
   }
 
-  function fetchSites(siteUrls) {
+  function fetchSites(siteInfos) {
     setLastRefresh(new Date());
-    Promise.all(siteUrls.map(async (url, ix) => {
-      const siteInfo = await fetchSite(url)
+    Promise.all(siteInfos.map(async (site, ix) => {
+      const newInfo = await fetchSite(site.url);
+      const siteInfo = { ...site, ...newInfo }
 
       // Update siteInfos asynchronously
       setSiteInfos((oldSiteInfos) => {
@@ -241,14 +246,14 @@ const IndexPage = () => {
   }
   useEffect(() => {
     // Update the document title using the browser API
-    fetchSites(siteUrls);
+    fetchSites(siteInfos);
   }, []);
   return (
     <Layout>
       <SitesSummary
         siteInfos={siteInfos}
         sortSitesBy={sortSitesBy} />
-      <button onClick={() => fetchSites(siteUrls)} className={sitesSummaryStyles.refreshButton}>
+      <button onClick={() => fetchSites(siteInfos)} className={sitesSummaryStyles.refreshButton}>
         Refresh
       </button>
       <span>Last refresh: { lastRefresh.toLocaleString() }</span>
