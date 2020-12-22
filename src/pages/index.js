@@ -97,6 +97,7 @@ const mkFieldSpec = ({title, hint = null, accessor, sortWith, renderer}) => {
 const fields = [
   mkFieldSpec({
     title: "name",
+    hint: "Site name",
     accessor: s => s.name,
     sortWith: stringSort,
     renderer: s => (
@@ -108,42 +109,49 @@ const fields = [
   }),
   mkFieldSpec({
     title: "server",
+    hint: "Server name",
     accessor: s => s.server,
     sortWith: stringSort,
     renderer: s => (<a href={s.url} rel="noreferrer" target="_blank">{s.server}</a>),
   }),
   mkFieldSpec({
     title: "title",
+    hint: "Site title",
     accessor: s => s.config.htmlTitle,
     sortWith: stringSort,
     renderer: s => s.config.htmlTitle,
   }),
   mkFieldSpec({
     title: "lat/lng",
+    hint: "Default map location",
     accessor: s => s.config.defaultLatLng,
     sortWith: arySort(numSort),
     renderer: s => s.config.defaultLatLng?.join(", "),
   }),
   mkFieldSpec({
     title: "timestamp",
+    hint: "Site's deployment timestamp",
     accessor: s => s.version.timestamp,
     sortWith: stringSort,
     renderer: s => s.version.timestamp,
   }),
   mkFieldSpec({
     title: "gitcommit",
+    hint: "Site's deployment commit",
     accessor: s => s.version.gitcommit,
     sortWith: stringSort,
     renderer: s => s.version.gitcommit,
   }),
   mkFieldSpec({
     title: "dataset",
+    hint: "Map datasets configured",
     accessor: s => s.config.namedDatasets,
     sortWith: arySort(stringSort),
     renderer: s => s.config.namedDatasets.join(", "),
   }),
   mkFieldSpec({
     title: "endpoint",
+    hint: "SPARQL endpoint",
     accessor: s => s.endpoint,
     sortWith: stringSort,
     renderer: s => {
@@ -159,6 +167,7 @@ const fields = [
   }),
   mkFieldSpec({
     title: "DGU",
+    hint: "SPARQL query default graph URI",
     accessor: s => s.defaultGraphUri,
     sortWith: stringSort,
     renderer: s => (<a href={s.defaultGraphUri} rel="noreferrer" target="_blank">{s.defaultGraphUri}</a>),
