@@ -10,7 +10,7 @@
 
 function text($url) {
     $contents = file_get_contents($url);
-    if ($contents === False)
+    if ($contents === false)
         throw new Exception("Failed to get URL: $url");
     return $contents;
 }
@@ -18,6 +18,23 @@ function text($url) {
 
 function json($url) {
     return json_decode(text($url), true);
+}
+
+// Adapted from https://stackoverflow.com/a/7555543
+function get_redirected_url($url) {
+    $context = stream_context_create(array(
+        'http' => array(
+            'method' => 'HEAD'
+        )
+    ));
+    $headers = get_headers($url, 1, $context);
+    if ($headers !== false && isset($headers['Location'])) {
+        if(is_array($headers['Location'])){
+            return array_pop($headers['Location']);
+        }
+        return $headers['Location'];
+    }
+    return false;
 }
 
 function inspect_site($url) {
@@ -31,11 +48,14 @@ function inspect_site($url) {
     $dgu = text("$url/configuration/$dataset/default-graph-uri.txt");
     $query = text("$url/configuration/$dataset/query.rq");
 
-    $meta = [];
+    $index_url = get_redirected_url("$dgu/");
     try {
-        $meta = json("$dgu/meta.json");
+        $meta_url = substr_replace($index_url, "meta.json", -9);
+        $meta = json($meta_url);
     }
-    catch(Exception $e) {}
+    catch(Exception $e) {
+        $meta = [];
+    }
     
     return ['url' => $url,
             'config' => $config,
@@ -43,6 +63,7 @@ function inspect_site($url) {
             'endpoint' => $endpoint,
             'defaultGraphUri' => $dgu,
             'query' => $query,
+            'meta_url' => $meta_url,
             'meta' => $meta];
 }
             
