@@ -1,3 +1,55 @@
+@use "sass:color";
+
+html,body {
+  background: white;
+  color: #333;
+  font-family: sans-serif;
+}
+
+.page-wrapper {
+  margin: 1rem;
+
+  h1 {
+    color: #0bb696;
+  }
+  a, a:visited {
+    color: #333;
+    text-decoration: none;
+  }
+  a:hover {
+    color: #0bb696;
+  }
+
+  button {
+    border-radius: 31px;
+    background: #0bb696;
+    color: white;
+    border: none;
+    padding: 1em 3em;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.sites-summary {
+  
+  th, td {
+    padding: 0.2rem;
+    border: 1px solid white;
+  }
+
+  th {
+    cursor: pointer;
+  }
+  
+  thead {
+    background-color: #0bb696;
+    color: white;
+  }
+  tbody tr:nth-child(odd) {
+    background-color: #ccc;
+  }
+}
 
 .ascending::after {
   margin-left: 1em;

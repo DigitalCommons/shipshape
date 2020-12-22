@@ -208,24 +208,26 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
     sortSitesBy(field, sortOrder);
   };
   return (
-    <table>
-      <thead>
-        <tr>
-          { fields.map((field, ix) =>
-                       <th
-                         key={ix}
-                         className={getClass(field.title)}
-                         title={field.hint}
-                         onClick={mkSortHandler(field)}>
-                       {field.title}
-                       </th>)
-          }
-        </tr>
-      </thead>
-      <tbody>
-      { siteInfos.map((siteInfo, ix) => <SiteSummary key={ix} siteInfo={siteInfo} />) }
-      </tbody>
-    </table>
+    <div  className={sitesSummaryStyles.sitesSummary}>
+      <table>
+        <thead>
+          <tr>
+            { fields.map((field, ix) =>
+                         <th
+                           key={ix}
+                           className={getClass(field.title)}
+                           title={field.hint}
+                           onClick={mkSortHandler(field)}>
+                         {field.title}
+                         </th>)
+            }
+          </tr>
+        </thead>
+        <tbody>
+        { siteInfos.map((siteInfo, ix) => <SiteSummary key={ix} siteInfo={siteInfo} />) }
+        </tbody>
+      </table>
+    </div>
   );
 }
 
