@@ -45,7 +45,86 @@ const siteSummaryColumns = [
   "url", "title", "lat/lng", "timestamp", "gitcommit", "dataset", "endpoint", "DGU"
 ];
 
+// Accessor functions for the raw values to show in each column
+// See htmlFieldMap for the HTML-ised version.
 const fieldMap = {
+  "url": s => s.url,
+  "title": s => s.config.htmlTitle,
+  "lat/lng": s => s.config.defaultLatLng,
+  "timestamp": s => s.version.timestamp,
+  "gitcommit": s => s.version.gitcommit,
+  "dataset": s => s.config.namedDatasets,
+  "endpoint": s => s.endpoint,
+  "DGU" : s => s.defaultGraphUri,
+};
+
+// Various sort functions. Reminder: compare(a, b) functions should return
+// -1 if a is before b, 1 if it is after, and 0 if they are equal.
+
+const stringSort = (a, b) => String(a).localeCompare(String(b));
+
+const numSort = (a, b) => Math.sign(Number(a) - Number(b));
+
+const arySort = (compare) => (a, b) => {
+  // handle non-arrays
+  if (!Array.isArray(a)) a = [];
+  if (!Array.isArray(b)) b = [];
+
+  if (a.length < b.length) return -1;
+  if (a.length > b.length) return 1;
+  
+  let ix = 0;
+  while (ix < a.length) {
+    const comparison = compare(a[ix], b[ix]);
+    if (comparison)
+      return comparison;
+    ix += 1;
+  }
+  return 0;
+}
+
+// Calls a function, but eats errors
+const safeInvoke = (func, msg = "silenced error") => {
+  try { return func() }
+  catch(_) {
+    //console.debug(msg, _, _.stack);
+    return undefined;
+  }
+}
+
+// Make a comparison function which compares using compare and accessor,
+// but eats errors 
+const mkSafeComparer = (comparer, accessor, invert = false) => {
+  
+  return (a, b) => {
+    const va = safeInvoke(() => accessor(a));
+    const vb = safeInvoke(() => accessor(b));
+    return invert? comparer(va, vb) : comparer(vb, va);
+  }
+}
+
+// A returns an object with a pre-generated forward and reverse comparer
+// using the given basic value comparer and value accessor
+const mkSorter = (comparer, accessor) => ({
+  true: mkSafeComparer(comparer, accessor, true),
+  false: mkSafeComparer(comparer, accessor, false),
+});
+
+
+// Maps each column title to a sorter function for that column
+const sortFieldMap = {
+  "url": mkSorter(stringSort, fieldMap.url),
+  "title": mkSorter(stringSort, fieldMap.title),
+  "lat/lng": mkSorter(arySort(numSort), fieldMap["lat/lng"]),
+  "timestamp": mkSorter(stringSort, fieldMap.timestamp),
+  "gitcommit": mkSorter(stringSort, fieldMap.gitcommit),
+  "dataset": mkSorter(arySort(stringSort), fieldMap.dataset),
+  "endpoint": mkSorter(stringSort, fieldMap.endpoint),
+  "DGU" : mkSorter(stringSort, fieldMap.DGU),
+};
+
+// Functions to generate the html value in columns
+const htmlFieldMap = {
   "url": s => <a href={s.url} rel="noreferrer" target="_blank">{s.url}</a>,
   "title": s => s.config.htmlTitle,
   "lat/lng": s => s.config.defaultLatLng?.join(", "),
@@ -68,7 +147,7 @@ const fieldMap = {
 const SiteSummary = ({ siteInfo }) => {
   const value = (col) => {
     try {
-      return fieldMap[col](siteInfo);
+      return htmlFieldMap[col](siteInfo);
     }
     catch(_) {
       return '-';
@@ -81,12 +160,34 @@ const SiteSummary = ({ siteInfo }) => {
   );
 }
 
-const SitesSummary = ({ siteInfos }) => {
+const SitesSummary = ({ siteInfos, sortSitesBy }) => {
+  const [sortState, setSortState] = useState({});
+  
+  // FIXME css modulize
+  const getClass = (col) => {
+    if (col in sortState) {
+      return sortState[col]? 'sorted ascending' : 'sorted descending';
+    }
+    return 'unsorted';
+  };
+  const mkSortHandler = (col) => () => {
+    const sortOrder = !sortState[col];
+    const newSortState = { [col]: sortOrder };
+    setSortState(newSortState);
+    sortSitesBy(col, sortOrder);
+  };
   return (
     <table>
       <thead>
         <tr>
-          { siteSummaryColumns.map(col => <th key={col}>{col}</th>) }
+          { siteSummaryColumns.map(col =>
+                                   <th
+                                     key={col}
+                                     className={getClass(col)}
+                                     onClick={mkSortHandler(col)}>
+                                     {col}
+                                   </th>)
+          }
         </tr>
       </thead>
       <tbody>
@@ -140,13 +241,24 @@ const IndexPage = () => {
       });
     }));
   }
+
+  function sortSitesBy(col, isAscending = true) {
+    const sorter = sortFieldMap[col][isAscending];
+    //console.log("sortSitesBy", col, isAscending);
+
+    setSiteInfos((oldSiteInfos) => {
+      return oldSiteInfos.slice().sort(sorter);
+    });
+  }
   useEffect(() => {
     // Update the document title using the browser API
     fetchSites(siteUrls);
   }, []);
   return (
     <Layout>
-      <SitesSummary siteInfos={siteInfos} />
+      <SitesSummary
+        siteInfos={siteInfos}
+        sortSitesBy={sortSitesBy} />
       <button onClick={() => fetchSites(siteUrls)}>
         Refresh
       </button>
