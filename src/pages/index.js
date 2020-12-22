@@ -30,13 +30,14 @@ const sites = {
 };
 
 const siteSummaryColumns = [
-  "url", "title", "lat/lng", "timestamp", "gitcommit", "dataset", "endpoint", "DGU"
+  "name", "server", "title", "lat/lng", "timestamp", "gitcommit", "dataset", "endpoint", "DGU"
 ];
 
 // Accessor functions for the raw values to show in each column
 // See htmlFieldMap for the HTML-ised version.
 const fieldMap = {
-  "url": s => s.url,
+  "name": s => s.name,
+  "server": s => s.server,
   "title": s => s.config.htmlTitle,
   "lat/lng": s => s.config.defaultLatLng,
   "timestamp": s => s.version.timestamp,
@@ -101,7 +102,8 @@ const mkSorter = (comparer, accessor) => ({
 
 // Maps each column title to a sorter function for that column
 const sortFieldMap = {
-  "url": mkSorter(stringSort, fieldMap.url),
+  "name": mkSorter(stringSort, fieldMap.name),
+  "server": mkSorter(stringSort, fieldMap.server),
   "title": mkSorter(stringSort, fieldMap.title),
   "lat/lng": mkSorter(arySort(numSort), fieldMap["lat/lng"]),
   "timestamp": mkSorter(stringSort, fieldMap.timestamp),
@@ -113,7 +115,12 @@ const sortFieldMap = {
 
 // Functions to generate the html value in columns
 const htmlFieldMap = {
-  "url": s => <a href={s.url} rel="noreferrer" target="_blank">{s.url}</a>,
+  "name": s =>
+    <>
+    <span>{s.name}</span>&nbsp;
+    <a href={`data:application/json;base64,`+btoa(JSON.stringify(s,null,2))} rel="noreferrer" target="_blank">&#x2699;</a>
+    </>,
+  "server": s => <a href={s.url} rel="noreferrer" target="_blank">{s.server}</a>,
   "title": s => s.config.htmlTitle,
   "lat/lng": s => s.config.defaultLatLng?.join(", "),
   "timestamp": s => s.version.timestamp,
