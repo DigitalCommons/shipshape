@@ -6,22 +6,6 @@ import sitesSummaryStyles from "../components/sitesSummary.module.scss"
 import cn from "classnames"
 
 const sites = {
-  paths: {
-    "coopsuk@dev-0": "/var/www/vhosts/coopsuk.solidarityeconomy.coop/www",
-    "dotcoop-project@dev-0": "/var/www/vhosts/dotcoop.solidarityeconomy.coop/www",
-    "ica-project@dev-0": "/var/www/vhosts/ica.solidarityeconomy.coop/www",
-    "mutual-aid-project@dev-0": "/var/www/vhosts/mutual-aid.solidarityeconomy.coop/www",
-    "newbridge-project@dev-0": "/var/www/vhosts/newbridge.solidarityeconomy.coop/www",
-    "oxford-project@dev-0": "/var/www/vhosts/oxford.solidarityeconomy.coop/www",
-
-    "coopsuk@prod-0": "/var/www/vhosts/coopsuk.solidarityeconomy.coop/www",
-    "dotcoop-project@prod-0": "/var/www/vhosts/dotcoop.solidarityeconomy.coop/www",
-    "ica-project@prod-0": "/var/www/vhosts/ica.solidarityeconomy.coop/www",
-    "mutual-aid-project@prod-0": "/var/www/vhosts/mutual-aid.solidarityeconomy.coop/www",
-    "newbridge-project@prod-0": "/var/www/vhosts/newbridge.solidarityeconomy.coop/www",
-    "oxford-project@prod-0": "/var/www/vhosts/oxford.solidarityeconomy.coop/www",    
-  },
-
   deployed: {
     "dev-0": {
       "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
