@@ -262,7 +262,7 @@ const IndexPage = () => {
       <SitesSummary
         siteInfos={siteInfos}
         sortSitesBy={sortSitesBy} />
-      <button onClick={() => fetchSites(siteUrls)}>
+      <button onClick={() => fetchSites(siteUrls)} className={sitesSummaryStyles.refreshButton}>
         Refresh
       </button>
       <span>Last refresh: { lastRefresh.toLocaleString() }</span>
