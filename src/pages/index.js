@@ -261,7 +261,7 @@ const IndexPage = () => {
   function fetchSites() {
     setLastRefresh(new Date());
     setSiteInfos(emptySiteInfos())
-    Promise.all(siteInfos.map(async (site, ix) => {
+    siteInfos.forEach(async (site, ix) => {
       const newInfo = await fetchSite(site.url);
       const siteInfo = { ...site, ...newInfo }
 
@@ -276,7 +276,7 @@ const IndexPage = () => {
         //console.log("after",ix, newSiteInfos);
         return newSiteInfos;
       });
-    }));
+    });
   }
 
   function sortSitesBy(field, isAscending = true) {
