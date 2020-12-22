@@ -126,7 +126,16 @@ const fields = [
     hint: "Default map location",
     accessor: s => s.config.defaultLatLng,
     sortWith: arySort(numSort),
-    renderer: s => s.config.defaultLatLng?.join(", "),
+    renderer: s => {
+      const coords = s.config.defaultLatLng;
+      if (!coords) return "-";
+      return (
+        <a href={`https://www.openstreetmap.org/#map=12/${coords.join('/')}`}
+          rel="noreferrer" target="_blank">
+          {s.config.defaultLatLng?.join(", ")}
+        </a>
+      )
+    },
   }),
   mkFieldSpec({
     title: "timestamp",
