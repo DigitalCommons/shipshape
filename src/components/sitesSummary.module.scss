@@ -1,0 +1,10 @@
+
+.ascending::after {
+  margin-left: 1em;
+  content: "\25BC";
+}
+
+.descending::after {
+  margin-left: 1em;
+  content: "\25B2";  
+}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import { withPrefix } from "gatsby"
 import Layout from "../components/layout"
 import axios from "axios"
+import sitesSummaryStyles from "../components/sitesSummary.module.scss"
+import cn from "classnames"
 
 const sites = {
   paths: {
@@ -166,9 +168,10 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
   // FIXME css modulize
   const getClass = (col) => {
     if (col in sortState) {
-      return sortState[col]? 'sorted ascending' : 'sorted descending';
+      return cn(sitesSummaryStyles.sorted,
+                sortState[col]? sitesSummaryStyles.ascending : sitesSummaryStyles.descending);
     }
-    return 'unsorted';
+    return sitesSummaryStyles.unsorted;
   };
   const mkSortHandler = (col) => () => {
     const sortOrder = !sortState[col];
