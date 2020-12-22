@@ -193,7 +193,6 @@ const SiteSummary = ({ siteInfo }) => {
 const SitesSummary = ({ siteInfos, sortSitesBy }) => {
   const [sortState, setSortState] = useState({});
   
-  // FIXME css modulize
   const getClass = (col) => {
     if (col in sortState) {
       return cn(sitesSummaryStyles.sorted,
