@@ -4,30 +4,8 @@ import Layout from "../components/layout"
 import axios from "axios"
 import sitesSummaryStyles from "../components/sitesSummary.module.scss"
 import cn from "classnames"
-
-const sites = {
-  deployed: {
-    "dev-0": {
-      "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
-      "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
-      "ica-project": "https://dev.ica.solidarityeconomy.coop",
-      "mutual-aid-project": "https://dev.mutual-aid.solidarityeconomy.coop",
-      "newbridge-project": "https://dev.newbridge.solidarityeconomy.coop",
-      "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
-      "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
-    },
-    
-    "prod-0": {
-      "coopsuk": "https://prod.coopsuk.solidarityeconomy.coop",
-      "dotcoop-project": "https://prod.dotcoop.solidarityeconomy.coop",
-      "ica-project": "https://prod.ica.solidarityeconomy.coop",
-      "mutual-aid-project": "https://prod.mutual-aid.solidarityeconomy.coop",
-      "newbridge-project": "https://prod.newbridge.solidarityeconomy.coop",
-      "oxford-project": "https://prod.oxford.solidarityeconomy.coop",
-      "mersey-green-project": "https://prod.mersey-green.solidarityeconomy.coop",
-   },
-  },
-};
+import config from "../../config.js"
+const sites = config.sites;
 
 // Various sort functions. Reminder: compare(a, b) functions should return
 // -1 if a is before b, 1 if it is after, and 0 if they are equal.
