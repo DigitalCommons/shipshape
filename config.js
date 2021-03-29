@@ -3,6 +3,7 @@ module.exports = {
     deployed: {
       "dev-0": {
         "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
+        "covid-mutual-aid-project": "https://dev.mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
         "ica-project": "https://dev.ica.solidarityeconomy.coop",
         "ica-youth-project": "https://dev.ica-youth-network.solidarityeconomy.coop",
@@ -14,6 +15,7 @@ module.exports = {
       
       "prod-0": {
         "coopsuk": "https://prod.coopsuk.solidarityeconomy.coop",
+        "covid-mutual-aid-project": "https://prod.mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://prod.dotcoop.solidarityeconomy.coop",
         "ica-project": "https://prod.ica.solidarityeconomy.coop",
         "ica-youth-project": "https://prod.ica-youth-network.solidarityeconomy.coop",
