@@ -1,7 +1,7 @@
 module.exports = {
   sites: {
     deployed: {
-      "dev-0": {
+      "dev-1": {
         "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
         "covid-mutual-aid-project": "https://dev.covid-mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
