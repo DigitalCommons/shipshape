@@ -116,18 +116,30 @@ const fields = [
     },
   }),
   mkFieldSpec({
-    title: "timestamp",
+    title: "sea-map version",
+    hint: "Sea-map version in use",
+    accessor: s => s.version.seaMapVersion,
+    sortWith: stringSort,
+    renderer: s => {
+      const commit =
+        s.version.seaMapResolvedVersion?.replace(/.*#/, '') ||
+        s.version.seaMapVersion?.match(/_([^-]+)/)[1];
+      const commitUrl = 'https://github.com/SolidarityEconomyAssociation/sea-map/' +
+                  (commit ? 'commits/'+commit : '');
+      return (
+        <a href={commitUrl}
+        rel="noreferrer" target="_blank">
+        {s.version.seaMapVersion}
+        </a>
+      )
+    },
+  }),
+  mkFieldSpec({
+    title: "site deployed at",
     hint: "Site's deployment timestamp",
     accessor: s => s.version.timestamp,
     sortWith: stringSort,
     renderer: s => s.version.timestamp,
-  }),
-  mkFieldSpec({
-    title: "gitcommit",
-    hint: "Site's deployment commit",
-    accessor: s => s.version.gitcommit,
-    sortWith: stringSort,
-    renderer: s => s.version.gitcommit,
   }),
   mkFieldSpec({
     title: "dataset",
