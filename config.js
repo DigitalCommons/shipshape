@@ -9,7 +9,7 @@ module.exports = {
         "ica-youth-project": "https://dev.ica-youth-network.solidarityeconomy.coop",
         "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
         "mutual-aid-project": "https://dev.mutual-aid.solidarityeconomy.coop",
-        "newbridge-project": "https://dev.newbridge.solidarityeconomy.coop",
+        "newbridge-project": "https://dev.maps.solidarityeconomy.coop/newbridge/",
         "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
       },
       
@@ -21,7 +21,7 @@ module.exports = {
         "ica-youth-project": "https://prod.ica-youth-network.solidarityeconomy.coop",
         "mersey-green-project": "https://prod.mersey-green.solidarityeconomy.coop",
         "mutual-aid-project": "https://prod.mutual-aid.solidarityeconomy.coop",
-        "newbridge-project": "https://prod.newbridge.solidarityeconomy.coop",
+        "newbridge-project": "https://prod.maps.solidarityeconomy.coop/newbridge/",
         "oxford-project": "https://prod.oxford.solidarityeconomy.coop",
       },
     },
