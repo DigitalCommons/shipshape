@@ -10,6 +10,7 @@ module.exports = {
         "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
         "mutual-aid-project": "https://dev.mutual-aid.solidarityeconomy.coop",
         "newbridge-project": "https://dev.maps.solidarityeconomy.coop/newbridge/",
+        "owned-by-oxford-project": "https://dev.maps.solidarityeconomy.coop/owned-by-oxford/",
         "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
       },
       
@@ -22,6 +23,7 @@ module.exports = {
         "mersey-green-project": "https://prod.mersey-green.solidarityeconomy.coop",
         "mutual-aid-project": "https://prod.mutual-aid.solidarityeconomy.coop",
         "newbridge-project": "https://prod.maps.solidarityeconomy.coop/newbridge/",
+        "owned-by-oxford-project": "https://prod.maps.solidarityeconomy.coop/owned-by-oxford/",
         "oxford-project": "https://prod.oxford.solidarityeconomy.coop",
       },
     },
