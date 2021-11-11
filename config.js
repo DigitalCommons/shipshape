@@ -1,7 +1,7 @@
 module.exports = {
   sites: {
     deployed: {
-      "dev-1": {
+      "dev": {
         "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
         "covid-mutual-aid-project": "https://dev.covid-mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
@@ -13,7 +13,7 @@ module.exports = {
         "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
       },
       
-      "prod-0": {
+      "prod": {
         "coopsuk": "https://prod.coopsuk.solidarityeconomy.coop",
         "covid-mutual-aid-project": "https://prod.covid-mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://prod.dotcoop.solidarityeconomy.coop",
