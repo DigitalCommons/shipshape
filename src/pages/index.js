@@ -121,9 +121,14 @@ const fields = [
     accessor: s => s.version.seaMapVersion,
     sortWith: stringSort,
     renderer: s => {
-      const commit =
-        s.version.seaMapResolvedVersion?.replace(/.*#/, '') ||
-        s.version.seaMapVersion?.match(/_([^-]+)/)[1];
+      let commit = s.version.seaMapResolvedVersion?.replace(/.*#/, '')
+      if (!commit) {
+        const match = s.version.seaMapVersion?.match(/_([^-]+)/);
+        if (match && match.length > 1)
+          commit = match[1];
+        else
+          commit = `v${s.version.seaMapVersion}`
+      }
       const commitUrl = 'https://github.com/SolidarityEconomyAssociation/sea-map/' +
                   (commit ? 'commits/'+commit : '');
       return (
@@ -178,7 +183,8 @@ const SiteSummary = ({ siteInfo }) => {
     try {
       return field.renderer(siteInfo);
     }
-    catch(_) {
+    catch(e) {
+      console.debug(`error rendering field '${field.title}' for site '${siteInfo.name}': ${e}`);
       return '-';
     }
   };
