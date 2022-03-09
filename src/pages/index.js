@@ -181,11 +181,14 @@ const fields = [
 const SiteSummary = ({ siteInfo }) => {
   const value = (field) => {
     try {
-      return field.renderer(siteInfo);
+      if (typeof siteInfo === 'object' && Object.keys(siteInfo).length > 3)
+        return field.renderer(siteInfo);
+      else
+        return '-'
     }
     catch(e) {
       console.debug(`error rendering field '${field.title}' for site '${siteInfo.name}': ${e}`);
-      return '-';
+      return 'x';
     }
   };
   return (
