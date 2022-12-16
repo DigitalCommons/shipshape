@@ -8,16 +8,27 @@
  */
 
 
-function text($url) {
+function text($url, $default = NULL) {
     $contents = file_get_contents($url);
-    if ($contents === false)
-        throw new Exception("Failed to get URL: $url");
+    if ($contents === false) {
+        if ($default === NULL)
+            throw new Exception("Failed to get URL: $url");
+        else
+            return $default;
+    }
     return $contents;
 }
 
 
-function json($url) {
-    return json_decode(text($url), true);
+function json($url, $default = NULL) {
+    $contents = file_get_contents($url);
+    if ($contents === false) {
+        if ($default === NULL)
+            throw new Exception("Failed to get URL: $url");
+        else
+            return $default;
+    }
+    return json_decode($contents, true);
 }
 
 // Adapted from https://stackoverflow.com/a/7555543
@@ -40,13 +51,13 @@ function get_redirected_url($url) {
 function inspect_site($url) {
 
     $config = json("$url/configuration/config.json");
-    $version = json("$url/configuration/version.json");
+    $version = json("$url/configuration/version.json", []);
     
     $dataset = $config["namedDatasets"][0];
 
-    $endpoint = text("$url/configuration/$dataset/endpoint.txt");
-    $dgu = text("$url/configuration/$dataset/default-graph-uri.txt");
-    $query = text("$url/configuration/$dataset/query.rq");
+    $endpoint = text("$url/configuration/$dataset/endpoint.txt", "");
+    $dgu = text("$url/configuration/$dataset/default-graph-uri.txt", "");
+    $query = text("$url/configuration/$dataset/query.rq", "");
 
     $index_url = get_redirected_url("$dgu/");
     try {
