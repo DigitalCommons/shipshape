@@ -49,6 +49,9 @@ function get_redirected_url($url) {
 }
 
 function inspect_site($url) {
+    // Strip any trailing slash from the url
+    $url = preg_replace('/\\/+$/', '', $url);
+    
     $datasetToParams = function($datasets, $dataset) use($url) {
         $params = [
             'endpoint' => trim(text("$url/configuration/$dataset/endpoint.txt", "")),
