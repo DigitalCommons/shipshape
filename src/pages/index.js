@@ -156,25 +156,37 @@ const fields = [
   mkFieldSpec({
     title: "endpoint",
     hint: "SPARQL endpoint",
-    accessor: s => s.endpoint,
+    accessor: s => {
+      const name = s.config.namedDatasets[0];
+      return s.datasets[name].endpoint;
+    },
     sortWith: stringSort,
     renderer: s => {
       // See
       // http://docs.openlinksw.com/virtuoso/rdfsparqlprotocolendpoint/
       // for how to construct this URL
+      const name = s.config.namedDatasets[0];
+      const d = s.datasets[name];
       const usp = new URLSearchParams();
-      usp.append("qtxt", s.query);
-      usp.append("default-graph-uri", s.defaultGraphUri);
-      const queryUrl = s.endpoint+'?'+usp.toString();
-      return <a href={queryUrl} rel="noreferrer" target="_blank">{s.endpoint}</a>
+      usp.append("qtxt", d.query);
+      usp.append("default-graph-uri", d.defaultGraphUri);
+      const queryUrl = d.endpoint+'?'+usp.toString();
+      return <a href={queryUrl} rel="noreferrer" target="_blank">{d.endpoint}</a>
     },
   }),
   mkFieldSpec({
     title: "DGU",
     hint: "SPARQL query default graph URI",
-    accessor: s => s.defaultGraphUri,
+    accessor: s => {
+      const name = s.config.namedDatasets[0];
+      return s.datasets[name].defaultGraphUri;
+    },
     sortWith: stringSort,
-    renderer: s => (<a href={s.defaultGraphUri} rel="noreferrer" target="_blank">{s.defaultGraphUri}</a>),
+    renderer: s => {
+      const name = s.config.namedDatasets[0];
+      const d = s.datasets[name];
+      return (<a href={d.defaultGraphUri} rel="noreferrer" target="_blank">{d.defaultGraphUri}</a>);
+    },
   }),
 ];
 

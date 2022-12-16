@@ -49,33 +49,37 @@ function get_redirected_url($url) {
 }
 
 function inspect_site($url) {
+    $datasetToParams = function($datasets, $dataset) use($url) {
+        $params = [
+            'endpoint' => trim(text("$url/configuration/$dataset/endpoint.txt", "")),
+            'defaultGraphUri' => trim(text("$url/configuration/$dataset/default-graph-uri.txt", "")),
+            'query' => trim(text("$url/configuration/$dataset/query.rq", "")),
+            'meta' => ['?'],
+            'meta_url' => '',
+        ];
 
-    $config = json("$url/configuration/config.json");
+        if ($params['defaultGraphUri']) {
+            // Ensure $defaultGraphUri ends with a slash before getting it
+            $dgu = preg_replace('/\\/*\\s*$/', '/', $params['defaultGraphUri']);
+            $index_url = get_redirected_url($dgu);
+            $meta_url = preg_replace('/\\/[^\\/]*$/i', '/meta.json', $index_url);
+            $params['meta_url'] = $meta_url;
+            $params['meta'] = json($meta_url, []);
+        }
+        $datasets[$dataset] = $params;
+        return $datasets;
+    };
+
+    $config = json("$url/configuration/config.json", []);
     $version = json("$url/configuration/version.json", []);
-    
-    $dataset = $config["namedDatasets"][0];
 
-    $endpoint = text("$url/configuration/$dataset/endpoint.txt", "");
-    $dgu = text("$url/configuration/$dataset/default-graph-uri.txt", "");
-    $query = text("$url/configuration/$dataset/query.rq", "");
-
-    $index_url = get_redirected_url("$dgu/");
-    try {
-        $meta_url = substr_replace($index_url, "meta.json", -9);
-        $meta = json($meta_url);
-    }
-    catch(Exception $e) {
-        $meta = [];
-    }
+    $datasets = array_key_exists("namedDatasets", $config) && is_array($config["namedDatasets"])?
+              array_reduce($config["namedDatasets"], $datasetToParams, []) : [];
     
     return ['url' => $url,
             'config' => $config,
-            'version' => $version,
-            'endpoint' => $endpoint,
-            'defaultGraphUri' => $dgu,
-            'query' => $query,
-            'meta_url' => $meta_url,
-            'meta' => $meta];
+            'datasets' => $datasets,
+            'version' => $version];
 }
             
 $url = $_GET['url'];
