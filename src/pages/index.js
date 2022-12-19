@@ -309,9 +309,9 @@ const IndexPage = () => {
     });
   }
   useEffect(() => {
-    // Update the document title using the browser API
-    fetchSites(emptySiteInfos());
-  }, []);
+    // This triggers the initial update of the data
+    fetchSites(); 
+  });
   return (
     <Layout>
       <SitesSummary
