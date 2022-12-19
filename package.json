@@ -45,7 +45,7 @@
   },
   "scripts": {
     "build": "gatsby build --prefix-paths",
-    "deploy": "set -x; rsync -avzc --delete --rsync-path='sudo rsync' --usermap=\"*:$npm_package_config_deploy_user\" --groupmap=\"*:$npm_package_config_deploy_group\" public/ php/ --exclude=*~ \"${npm_package_config_deploy_to:?Please define the '$npm_package_name:deploy_to' npm config parameter}\"",
+    "deploy": "bin/deploy.sh",
     "predevelop": "php -t php -S 0.0.0.0:8080 &",
     "develop": "gatsby develop -H 0.0.0.0",
     "postdevelop": "pkill $(lsof -t -i:8080)",
