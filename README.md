@@ -1,6 +1,6 @@
 # Ship-shape: Status information for the Solidarity Economy Association maps
 
-This is a Gatsby generated website which shows sea-map site information.
+This is a Gatsby generated website which shows sea-map and mykomap site information.
 
 ## Prerequisites
 
@@ -12,10 +12,11 @@ development `php-cli` needs to be installed to service the API endpoint.
 
 ## Backend
 
-The backend is a simple PHP script which queries a sea-map site and
-generates JSON data describing it. It is deliberately fairly simple.
+The backend is a simple PHP script which queries a sea-map or mykomap
+site and generates JSON data describing it. It is deliberately fairly
+simple.
 
-[php/api/sea-map.php][1]
+[php/api/proxy.php][1]
 
 ## Front-end
 

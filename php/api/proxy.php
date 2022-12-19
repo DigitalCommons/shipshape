@@ -1,6 +1,6 @@
 <?php // -*- php -*-
 
-/** sea-map
+/** proxy.php
  *
  * Gets the config/version and other data about a sea-map website,
  * given the URL as the `url` parameter.

@@ -85,8 +85,8 @@ const fields = [
     sortWith: arySort(numSort),
   }),
   mkFieldSpec({
-    title: "sea-map version",
-    hint: "Sea-map version in use",
+    title: "code version",
+    hint: "Sea-map/mykomap version in use",
     sortWith: stringSort,
   }),
   mkFieldSpec({
@@ -174,7 +174,7 @@ const interpreters1 = {
       )
     },
   }),
-  "sea-map version": mkInterpreter({
+  "code version": mkInterpreter({
     accessor: s => s.version.seaMapVersion,
     renderer: s => renderVersion(s.version.seaMapVersion,
                                  s.version.seaMapResolvedVersion,
@@ -251,7 +251,7 @@ const interpreters1 = {
 // Keys must match the titles of the field specifications in fields.
 const interpreters2 = {
   ...interpreters1,
-  "sea-map version": mkInterpreter({
+  "code version": mkInterpreter({
     accessor: s => '2',
     renderer: s => '2.x',
   }),
@@ -266,7 +266,7 @@ const interpreters2 = {
 // Keys must match the titles of the field specifications in fields.
 const interpreters3 = {
   ...interpreters1,
-  "sea-map version": mkInterpreter({
+  "code version": mkInterpreter({
     accessor: s => s.config.mykoMapVersion,
     renderer: s => renderVersion(s.config.mykoMapVersion,
                                  s.config.mykoMapResolvedVersion,
@@ -376,7 +376,7 @@ const emptySiteInfos = () => {
 const IndexPage = () => {  
   const [lastRefresh, setLastRefresh] = useState(null); // Set to a rogue value here, update in useEffect
   const [siteInfos, setSiteInfos] = useState(emptySiteInfos());
-  const apiUrl = withPrefix('/api/sea-map.php');
+  const apiUrl = withPrefix('/api/proxy.php');
   async function fetchSite(siteUrl) {
     const url = `${apiUrl}?url=${siteUrl}`;
     console.log("fetching", url);
