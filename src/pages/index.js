@@ -52,32 +52,95 @@ const mkSafeComparer = (comparer, accessor, invert = false) => {
   }
 }
 
-// A returns an object with a pre-generated forward and reverse comparer
-// using the given basic value comparer and value accessor
-const mkSorter = (comparer, accessor) => ({
-  true: mkSafeComparer(comparer, accessor, true),
-  false: mkSafeComparer(comparer, accessor, false),
-});
-
 // Constructs a field specification
-const mkFieldSpec = ({title, hint = null, accessor, sortWith, renderer}) => {
+const mkFieldSpec = ({title, hint = null, sortWith}) => {
   return {
     title,
     hint,
-    accessor,
-    sorter: mkSorter(sortWith, accessor),
-    renderer,
+    comparer: sortWith,
   };
 };
 
 
-// An ordered list of field specifications
+// An ordered list of data table field specifications
 const fields = [
   mkFieldSpec({
     title: "name",
     hint: "Site name",
-    accessor: s => s.name,
     sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "server",
+    hint: "Server name",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "title",
+    hint: "Site title",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "lat/lng",
+    hint: "Default map location",
+    sortWith: arySort(numSort),
+  }),
+  mkFieldSpec({
+    title: "sea-map version",
+    hint: "Sea-map version in use",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "site deployed at",
+    hint: "Site's deployment timestamp",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "dataset",
+    hint: "Map datasets configured",
+    sortWith: arySort(stringSort),
+  }),
+  mkFieldSpec({
+    title: "endpoint",
+    hint: "SPARQL endpoint",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
+    title: "DGU",
+    hint: "SPARQL query default graph URI",
+    sortWith: stringSort,
+  }),
+];
+
+// Constructor for an SiteInfo field interpreter
+const mkInterpreter = ({accessor, renderer}) => ({
+  accessor, renderer
+});
+
+
+const renderVersion = (version, resolvedVersion, baseCommitUrl) => {
+  let commit = resolvedVersion?.replace(/.*#/, '')
+  if (!commit) {
+    const match = version?.match(/_([^-]+)/);
+    if (match && match.length > 1)
+      commit = match[1];
+    else
+      commit = `v${version}`
+  }
+  const commitUrl = baseCommitUrl +
+                    (commit ? 'commits/'+commit : '');
+  return (
+    <a href={commitUrl}
+      rel="noreferrer" target="_blank">
+      {version}
+    </a>
+  )
+};
+
+// SiteInfo interpreters for sea-map v0.x and v1.x sites.
+// Keys must match the titles of the field specifications in fields
+const interpreters1 = {
+  "name": mkInterpreter({
+    accessor: s => s.name,
     renderer: s => (
         <>
           <span>{s.name}</span>&nbsp;
@@ -85,25 +148,16 @@ const fields = [
         </>
     ),
   }),
-  mkFieldSpec({
-    title: "server",
-    hint: "Server name",
+  "server": mkInterpreter({
     accessor: s => s.server,
-    sortWith: stringSort,
     renderer: s => (<a href={s.url} rel="noreferrer" target="_blank">{s.server}</a>),
   }),
-  mkFieldSpec({
-    title: "title",
-    hint: "Site title",
+  "title": mkInterpreter({
     accessor: s => s.config.htmlTitle,
-    sortWith: stringSort,
     renderer: s => s.config.htmlTitle,
   }),
-  mkFieldSpec({
-    title: "lat/lng",
-    hint: "Default map location",
+  "lat/lng": mkInterpreter({
     accessor: s => s.config.defaultLatLng,
-    sortWith: arySort(numSort),
     renderer: s => {
       const coords = s.config.defaultLatLng;
       if (!coords) return "-";
@@ -115,52 +169,25 @@ const fields = [
       )
     },
   }),
-  mkFieldSpec({
-    title: "sea-map version",
-    hint: "Sea-map version in use",
+  "sea-map version": mkInterpreter({
     accessor: s => s.version.seaMapVersion,
-    sortWith: stringSort,
-    renderer: s => {
-      let commit = s.version.seaMapResolvedVersion?.replace(/.*#/, '')
-      if (!commit) {
-        const match = s.version.seaMapVersion?.match(/_([^-]+)/);
-        if (match && match.length > 1)
-          commit = match[1];
-        else
-          commit = `v${s.version.seaMapVersion}`
-      }
-      const commitUrl = 'https://github.com/SolidarityEconomyAssociation/sea-map/' +
-                  (commit ? 'commits/'+commit : '');
-      return (
-        <a href={commitUrl}
-        rel="noreferrer" target="_blank">
-        {s.version.seaMapVersion}
-        </a>
-      )
-    },
+    renderer: s => renderVersion(s.version.seaMapVersion,
+                                 s.version.seaMapResolvedVersion,
+                                 'https://github.com/SolidarityEconomyAssociation/sea-map/'),
   }),
-  mkFieldSpec({
-    title: "site deployed at",
-    hint: "Site's deployment timestamp",
+  "site deployed at": mkInterpreter({
     accessor: s => s.version.timestamp,
-    sortWith: stringSort,
     renderer: s => s.version.timestamp,
   }),
-  mkFieldSpec({
-    title: "dataset",
-    hint: "Map datasets configured",
+  "dataset": mkInterpreter({
     accessor: s => s.config.namedDatasets,
-    sortWith: arySort(stringSort),
     renderer: s => s.config.namedDatasets.join(", "),
   }),
-  mkFieldSpec({
-    title: "endpoint",
-    hint: "SPARQL endpoint",
+  "endpoint": mkInterpreter({
     accessor: s => {
       const name = s.config.namedDatasets[0];
       return s.datasets[name].endpoint;
     },
-    sortWith: stringSort,
     renderer: s => {
       // See
       // http://docs.openlinksw.com/virtuoso/rdfsparqlprotocolendpoint/
@@ -174,27 +201,80 @@ const fields = [
       return <a href={queryUrl} rel="noreferrer" target="_blank">{d.endpoint}</a>
     },
   }),
-  mkFieldSpec({
-    title: "DGU",
-    hint: "SPARQL query default graph URI",
+  "DGU": mkInterpreter({
     accessor: s => {
       const name = s.config.namedDatasets[0];
       return s.datasets[name].defaultGraphUri;
     },
-    sortWith: stringSort,
     renderer: s => {
       const name = s.config.namedDatasets[0];
       const d = s.datasets[name];
       return (<a href={d.defaultGraphUri} rel="noreferrer" target="_blank">{d.defaultGraphUri}</a>);
     },
   }),
-];
+};
+
+
+// SiteInfo interpreters for sea-map v2.x sites. These didn't export
+// site info!
+//
+// Keys must match the titles of the field specifications in fields.
+const interpreters2 = {
+  ...interpreters1,
+  "sea-map version": mkInterpreter({
+    accessor: s => '2',
+    renderer: s => '2.x',
+  }),
+  "site deployed at": mkInterpreter({
+    accessor: s => '',
+    renderer: s => 'unknown',
+  }),
+};
+
+
+// SiteInfo interpreters for sea-map v3.x, renamed to mykomap.
+// Keys must match the titles of the field specifications in fields.
+const interpreters3 = {
+  ...interpreters1,
+  "sea-map version": mkInterpreter({
+    accessor: s => s.config.mykoMapVersion,
+    renderer: s => renderVersion(s.config.mykoMapVersion,
+                                 s.config.mykoMapResolvedVersion,
+                                 'https://github.com/DigitalCommons/mykomap/'),
+  }),
+  "site deployed at": mkInterpreter({
+    accessor: s => s.config.timestamp,
+    renderer: s => s.config.timestamp,
+  }),
+};
+
+
+
+
+// Given the info from a site (minus the name, url, etc.)
+// infer what version the info is and return an appropriate set of
+// field interpreters (which supply a uniform value accessor for sorting,
+// and renderer for display)
+const mkFieldInterpreters = (newInfo) => {
+  const seaMapVersion = newInfo.version?.seaMapVersion?.split(/[.]/);
+  const mykoMapVersion = newInfo.config?.mykoMapVersion?.split(/[.]/);
+  if (mykoMapVersion)
+    return interpreters3; // Must be a mykomap
+  if (seaMapVersion)
+    return interpreters1; // Must be a sea-map v0.x or v1.x
+
+  // Must be a sea-map v2.x or mykomap v3.0 (in which neither
+  // version.json nor config.json is not present). Same outcome.
+  return interpreters2;   
+};
 
 const SiteSummary = ({ siteInfo }) => {
   const value = (field) => {
     try {
-      if (typeof siteInfo === 'object' && Object.keys(siteInfo).length > 3)
-        return field.renderer(siteInfo);
+      if (typeof siteInfo === 'object' && Object.keys(siteInfo).length > 3) {
+        const interpreter = siteInfo._interpreters[field.title];
+        return interpreter.renderer(siteInfo);
+      }
       else
         return '-'
     }
@@ -284,7 +364,12 @@ const IndexPage = () => {
     setSiteInfos(emptySiteInfos())
     siteInfos.forEach(async (site, ix) => {
       const newInfo = await fetchSite(site.url);
-      const siteInfo = { ...site, ...newInfo }
+
+      // Work out what version of the info is returned, and provide
+      // interpreters which decode the newInfo in a uniform way.
+      const fieldInterpreters = mkFieldInterpreters(newInfo); 
+
+      const siteInfo = { ...site, ...newInfo, _interpreters: fieldInterpreters }
 
       // Update siteInfos asynchronously
       setSiteInfos((oldSiteInfos) => {
@@ -301,11 +386,25 @@ const IndexPage = () => {
   }
 
   function sortSitesBy(field, isAscending = true) {
-    const sorter = field.sorter[isAscending];
     //console.log("sortSitesBy", col, isAscending);
 
     setSiteInfos((oldSiteInfos) => {
-      return oldSiteInfos.slice().sort(sorter);
+      // Schwartzian transform sort: pre-compute the values we sort
+      // on, pair with the siteInfos.
+      const sortablePairs = oldSiteInfos.map(
+        // Each siteInfo has an _interpreters field which indexes the
+        // appropriate value accessors for each field
+        si => [si, safeInvoke(() => si._interpreters[field.title].accessor(si))]
+      );
+
+      // Make a comparer which operates on these pairs
+      const comparer = mkSafeComparer(field.comparer, pair => pair[1], isAscending);
+
+      // Sort the pairs
+      const sortedPairs = sortablePairs.sort(comparer);
+
+      // Return the unpaired siteInfos
+      return sortedPairs.map(pair => pair[0]);
     });
   }
   useEffect(() => {
