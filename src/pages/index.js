@@ -100,6 +100,11 @@ const fields = [
     sortWith: arySort(stringSort),
   }),
   mkFieldSpec({
+    title: "dataset deployed at",
+    hint: "The time this dataset was generated",
+    sortWith: stringSort,
+  }),
+  mkFieldSpec({
     title: "endpoint",
     hint: "SPARQL endpoint",
     sortWith: stringSort,
@@ -181,7 +186,32 @@ const interpreters1 = {
   }),
   "dataset": mkInterpreter({
     accessor: s => s.config.namedDatasets,
-    renderer: s => s.config.namedDatasets.join(", "),
+    renderer: s => {
+      const datasets = s.config.namedDatasets;
+      const items = datasets.map(
+        (dataset, ix) => (
+          <>
+          { ix === 0? "" : ", " } 
+          <a href={s.datasets[dataset]?.meta_url.replace('/meta.json', '/')} rel="noreferrer" target="_blank">{dataset}</a>
+          </>
+        )
+      );
+      return (<>{items}</>);
+    },
+  }),
+  "dataset deployed at": mkInterpreter({
+    accessor: s => {
+      const name = s.config.namedDatasets[0];
+      return s.datasets[name].meta?.timestamp;
+    },
+    renderer: s => {
+      const name = s.config.namedDatasets[0];
+      const dataset = s.datasets[name];
+      const timestamp = dataset?.meta?.timestamp;
+      return (
+        <a href={dataset?.meta_url} rel="noreferrer" target="_blank">{timestamp}</a>
+      );
+    },
   }),
   "endpoint": mkInterpreter({
     accessor: s => {
