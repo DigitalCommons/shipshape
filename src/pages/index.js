@@ -344,7 +344,7 @@ const emptySiteInfos = () => {
 }
 
 const IndexPage = () => {  
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+  const [lastRefresh, setLastRefresh] = useState(null); // Set to a rogue value here, update in useEffect
   const [siteInfos, setSiteInfos] = useState(emptySiteInfos());
   const apiUrl = withPrefix('/api/sea-map.php');
   async function fetchSite(siteUrl) {
@@ -373,13 +373,10 @@ const IndexPage = () => {
 
       // Update siteInfos asynchronously
       setSiteInfos((oldSiteInfos) => {
-        //console.log("before",ix, oldSiteInfos);
+        // console.log("before",ix, oldSiteInfos);
         const newSiteInfos = oldSiteInfos.slice();
-        while(newSiteInfos.length < ix+1) {
-          newSiteInfos.push({})
-        }
         newSiteInfos[ix] = siteInfo;
-        //console.log("after",ix, newSiteInfos);
+        // console.log("after",ix, newSiteInfos);
         return newSiteInfos;
       });
     });
@@ -409,7 +406,8 @@ const IndexPage = () => {
   }
   useEffect(() => {
     // This triggers the initial update of the data
-    fetchSites(); 
+    if (!lastRefresh)
+      fetchSites(); 
   });
   return (
     <Layout>
@@ -419,7 +417,7 @@ const IndexPage = () => {
       <button onClick={() => fetchSites()} className={sitesSummaryStyles.refreshButton}>
         Refresh
       </button>
-      <span>Last refresh: { lastRefresh.toLocaleString() }</span>
+      <span>Last refresh: { lastRefresh?.toLocaleString() }</span>
     </Layout>
   )
 }
