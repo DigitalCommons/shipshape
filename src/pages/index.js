@@ -329,10 +329,9 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
   
   const getClass = (col) => {
     if (col in sortState) {
-      return cn(sitesSummaryStyles.sorted,
-                sortState[col]? sitesSummaryStyles.ascending : sitesSummaryStyles.descending);
+      return cn(sortState[col]? sitesSummaryStyles.ascending : sitesSummaryStyles.descending);
     }
-    return sitesSummaryStyles.unsorted;
+    return '';
   };
   const mkSortHandler = (field) => () => {
     const sortOrder = !sortState[field.title];
