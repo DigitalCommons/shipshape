@@ -42,6 +42,6 @@ module.exports = {
   ],
   proxy: {
     prefix: "/api",
-    url: "http://localhost:8080",
+    url: "http://0.0.0.0:8080",
   },
 }
