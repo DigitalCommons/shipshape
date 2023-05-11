@@ -344,9 +344,9 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
       <table>
         <thead>
           <tr>
-            { fields.map((field, ix) =>
+            { fields.map((field) =>
                          <th
-                           key={ix}
+                           key={field.title}
                            className={getClass(field.title)}
                            title={field.hint}
                            onClick={mkSortHandler(field)}>
@@ -356,7 +356,7 @@ const SitesSummary = ({ siteInfos, sortSitesBy }) => {
           </tr>
         </thead>
         <tbody>
-        { siteInfos.map((siteInfo, ix) => <SiteSummary key={ix} siteInfo={siteInfo} />) }
+          { siteInfos.map((siteInfo) => <SiteSummary key={siteInfo.name+'/'+siteInfo.server} siteInfo={siteInfo} />) }
         </tbody>
       </table>
     </div>
