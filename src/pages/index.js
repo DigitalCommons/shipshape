@@ -146,10 +146,14 @@ const renderVersion = (version, resolvedVersion, baseCommitUrl) => {
 const interpreters1 = {
   "name": mkInterpreter({
     accessor: s => s.name,
+    // Note Unicode strings need special treatment or btoa will throw
+    // an "invalid character" exception
+    //
+    // https://developer.mozilla.org/en-US/docs/Glossary/Base64#solution_1_%E2%80%93_escaping_the_string_before_encoding_it
     renderer: s => (
         <>
           <span>{s.name}</span>&nbsp;
-          <a href={`data:application/json;base64,`+btoa(JSON.stringify(s,null,2))} rel="noreferrer" target="_blank">&#x2699;</a>
+          <a href={'data:application/json;charset=UTF-8;base64,'+btoa(unescape(encodeURIComponent(JSON.stringify(s,null,2))))} rel="noreferrer" target="_blank">&#x2699;</a>
         </>
     ),
   }),
