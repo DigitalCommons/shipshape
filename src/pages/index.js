@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { withPrefix } from "gatsby"
 import Layout from "../components/layout"
 import axios from "axios"
-import sitesSummaryStyles from "../components/sitesSummary.module.scss"
+import * as sitesSummaryStyles from "../components/sitesSummary.module.scss"
 import cn from "classnames"
 import config from "../../config.js"
 const sites = config.sites;

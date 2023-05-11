@@ -11,7 +11,7 @@ import { useStaticQuery, graphql } from "gatsby"
 import Helmet from "react-helmet"
 import Header from "./header"
 import "./layout.css"
-import sitesSummaryStyles from "./sitesSummary.module.scss"
+import * as sitesSummaryStyles from "./sitesSummary.module.scss"
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
