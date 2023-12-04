@@ -4,6 +4,8 @@ module.exports = {
       "dev": {
         "coopsuk": "https://dev.coopsuk.solidarityeconomy.coop",
         "covid-mutual-aid-project": "https://dev.covid-mutual-aid.solidarityeconomy.coop",
+        "demo-merge-map": "https://dev.maps.coop/demo-merge-map/",
+        "demo-merge-map-plus": "https://dev.maps.coop/demo-merge-map-plus/",
         "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
         "ica-project": "https://dev.ica.solidarityeconomy.coop",
         "icd-23": "https://dev.maps.coop/icd-23/",
