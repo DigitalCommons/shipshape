@@ -6,6 +6,7 @@ module.exports = {
         "covid-mutual-aid-project": "https://dev.covid-mutual-aid.solidarityeconomy.coop",
         "dotcoop-project": "https://dev.dotcoop.solidarityeconomy.coop",
         "ica-project": "https://dev.ica.solidarityeconomy.coop",
+        "icd-23": "https://dev.maps.coop/icd-23/",
         "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
         "newbridge-project": "https://dev.maps.solidarityeconomy.coop/newbridge/",
         "obo-public": "https://dev.maps.solidarityeconomy.coop/obo-public/",
