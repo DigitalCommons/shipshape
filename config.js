@@ -14,6 +14,7 @@ module.exports = {
         "obo-public": "https://dev.maps.solidarityeconomy.coop/obo-public/",
         "owned-by-oxford-project": "https://dev.maps.solidarityeconomy.coop/owned-by-oxford/",
         "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
+        "workers-coop": "https://dev.maps.coop/workers-coop/",
       },
       
       "prod": {
