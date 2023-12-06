@@ -1,4 +1,4 @@
-# Ship-shape: Status information for the Solidarity Economy Association maps
+# Ship-shape: Status information for the Digital Commons Co-operative's maps
 
 This is a Gatsby generated website which shows sea-map and mykomap site information.
 

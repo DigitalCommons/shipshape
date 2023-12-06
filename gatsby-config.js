@@ -27,13 +27,13 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `Ship-Shape SEA`,
+        name: `Ship-Shape DCC`,
         short_name: `Shape-Shape`,
         start_url: `/`,
         background_color: `white`,
-        theme_color: `#0bb696`,
+        theme_color: `#5d4d97`,
         display: `minimal-ui`,
-        icon: `src/images/sea-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/dcc-icon.png`, // This path is relative to the root of the site.
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality

@@ -182,7 +182,7 @@ const interpreters1 = {
     accessor: s => s.version.seaMapVersion,
     renderer: s => renderVersion(s.version.seaMapVersion,
                                  s.version.seaMapResolvedVersion,
-                                 'https://github.com/SolidarityEconomyAssociation/sea-map/'),
+                                 'https://github.com/DigitalCommons/mykomap/'),
   }),
   "site deployed at": mkInterpreter({
     accessor: s => s.version.timestamp,

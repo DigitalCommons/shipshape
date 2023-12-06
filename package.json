@@ -1,7 +1,7 @@
 {
   "name": "shipshape",
   "private": true,
-  "description": "Status information for the Solidarity Economy Association maps",
+  "description": "Status information for the Digital Commons Co-operative's maps",
   "version": "0.2.1",
   "contributors": [
     "wu-lee <npm.wu-lee@noodlefactory.co.uk>"
@@ -33,14 +33,15 @@
     "prettier": "2.8.8"
   },
   "keywords": [
-    "SEA",
-    "solidarity",
-    "association",
-    "economy",
+    "DCC",
+    "digital",
+    "commons",
+    "co-op",
+    "co-operative",
     "maps",
     "status"
   ],
-  "homepage": "https://github.com/SolidarityEconomyAssociation/shipshape",
+  "homepage": "https://github.com/DigitalCommons/shipshape",
   "license": "0BSD",
   "config": {
     "deploy_to": "",
@@ -61,9 +62,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SolidarityEconomyAssociation/shipshape"
+    "url": "https://github.com/DigitalCommons/shipshape"
   },
   "bugs": {
-    "url": "https://github.com/SolidarityEconomyAssociation/shipshape/issues"
+    "url": "https://github.com/DigitalCommons/shipshape/issues"
   }
 }
