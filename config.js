@@ -10,7 +10,7 @@ module.exports = {
         "old-ica-project": "https://dev.ica.solidarityeconomy.coop",
         "ica-project": "https://dev.maps.coop/ica",
         "icd-23": "https://dev.maps.coop/icd-23",
-        "mersey-green-project": "https://dev.mersey-green.solidarityeconomy.coop",
+        "mersey-green-project": "https://dev.maps.coop/mersey-green",
         "newbridge-project": "https://dev.maps.coop/newbridge-project",
         "obo-public": "https://dev.maps.solidarityeconomy.coop/obo-public",
         "owned-by-oxford-project": "https://dev.maps.solidarityeconomy.coop/owned-by-oxford",
