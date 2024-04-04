@@ -14,7 +14,6 @@ module.exports = {
         "newbridge-project": "https://dev.maps.solidarityeconomy.coop/newbridge/",
         "obo-public": "https://dev.maps.solidarityeconomy.coop/obo-public/",
         "owned-by-oxford-project": "https://dev.maps.solidarityeconomy.coop/owned-by-oxford/",
-        "oxford-project": "https://dev.oxford.solidarityeconomy.coop",
         "workers-coop": "https://dev.maps.coop/workers-coop/",
       },
       
@@ -28,7 +27,6 @@ module.exports = {
         "newbridge-project": "https://prod.maps.solidarityeconomy.coop/newbridge/",
         "owned-by-oxford-project": "https://prod.maps.solidarityeconomy.coop/owned-by-oxford/",
         "obo-public": "https://maps.solidarityeconomy.coop/obo-public/",
-        "oxford-project": "https://prod.oxford.solidarityeconomy.coop",
       },
     },
   }
