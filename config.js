@@ -28,6 +28,7 @@ module.exports = {
         "ica": "https://maps.coop/ica",
         "mersey-green": "https://maps.coop/mersey-green",
         "mutual-aid": "https://maps.coop/mutual-aid",
+        "newbridge": "https://maps.coop/newbridge/",
         "workers-coop": "https://maps.coop/workers-coop/",
         "pending-dotcoop": "https://maps.coop/dotcoop",
         "pending-obo-public": "https://maps.coop/obo-public",
