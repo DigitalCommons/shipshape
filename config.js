@@ -18,8 +18,7 @@ module.exports = {
         "mersey-green": "https://maps.coop/mersey-green",
         "newbridge": "https://maps.coop/newbridge",
         "workers-coop": "https://maps.coop/workers-coop",
-        "pending-obo-public": "https://maps.coop/obo-public",
-        "current-obo-public": "https://maps.solidarityeconomy.coop/obo-public",
+        "obo-public": "https://maps.coop/obo-public",
       },
     },
   }
